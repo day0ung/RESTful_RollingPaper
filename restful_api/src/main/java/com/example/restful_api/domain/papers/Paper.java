@@ -5,12 +5,14 @@ import com.example.restful_api.domain.BaseTimeEntity;
 import com.example.restful_api.domain.commnets.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Builder
 @AllArgsConstructor
 
@@ -27,7 +29,6 @@ public class Paper extends BaseTimeEntity {
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-    private String author;
     @OneToMany(mappedBy = "paper")
     private List<Comment> commentList = new ArrayList<>();
 
