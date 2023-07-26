@@ -22,7 +22,7 @@ public class Paper extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long user_id;
     @Column(length = 500, nullable = false)
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
