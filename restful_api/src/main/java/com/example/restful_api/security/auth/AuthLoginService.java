@@ -2,6 +2,7 @@ package com.example.restful_api.security.auth;
 
 import com.example.restful_api.domain.user.User;
 import com.example.restful_api.domain.user.UserRepository;
+import com.example.restful_api.security.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,10 +28,7 @@ public class AuthLoginService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
 
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
-        return new AuthLoginUser(user.getEmail(), user.getPassword(), authorities);
+        return new CustomUserPrincipal(user);
     }
 }
 

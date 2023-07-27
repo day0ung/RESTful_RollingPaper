@@ -2,7 +2,7 @@ package com.example.restful_api.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.restful_api.security.auth.AuthLoginUser;
+import com.example.restful_api.security.CustomUserPrincipal;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
-import java.util.SimpleTimeZone;
 
 @Getter
 @Component
@@ -35,12 +34,12 @@ public class JwtTokenProvider {
 
     private final Long accessTokenValidTime = 60 * 60 * 1000L; // 1 hour
 
-    public String createToken(AuthLoginUser authLoginUser) {
+    public String createToken(CustomUserPrincipal customUserPrincipal) {
         return JWT.create()
-                .withSubject(authLoginUser.getUsername())
+                .withSubject(customUserPrincipal.getUser().getName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10)))
-                .withClaim("email", authLoginUser.getEmail())
-                .withClaim("password", authLoginUser.getPassword())
+                .withClaim("email", customUserPrincipal.getUser().getEmail())
+                .withClaim("password", customUserPrincipal.getUser().getPassword())
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -51,7 +50,7 @@ public class JwtTokenProvider {
 
     public String verifyToken(String token){
         return JWT.require(Algorithm.HMAC512(secretKey)).build()
-                .verify(token).getClaim("email").asString();
+                .verify(token).getClaim("email").asString(); //ions.TokenExpiredException
     }
 
     public String extractToken(HttpServletRequest request) {
