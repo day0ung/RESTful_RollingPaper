@@ -49,11 +49,10 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("Login successfulAuthentication()");
-        LocalDateTime now = LocalDateTime.now();
-        AuthLoginUser authLoginUser = (AuthLoginUser) authResult.getPrincipal();
-        String jwtToken = jwtTokenProvider.create(authLoginUser);
 
-        response.addHeader("Authorization", "Bearer "+jwtToken);
+        AuthLoginUser authLoginUser = (AuthLoginUser) authResult.getPrincipal();
+        String jwtToken = jwtTokenProvider.createToken(authLoginUser);
+        jwtTokenProvider.sendToken(response, jwtToken);
 
     }
 }

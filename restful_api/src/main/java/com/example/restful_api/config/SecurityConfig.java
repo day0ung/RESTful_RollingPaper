@@ -1,9 +1,11 @@
 package com.example.restful_api.config;
 
 import com.example.restful_api.domain.user.Role;
+import com.example.restful_api.domain.user.UserRepository;
 import com.example.restful_api.security.auth.AuthLoginService;
 import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
+import com.example.restful_api.security.jwt.filter.JwtBasicAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,8 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final UserRepository userRepository;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -57,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .headers().frameOptions().disable()
+                .headers().frameOptions().disable() //h2-console
                 .and()
                 .csrf().disable()
                 .httpBasic().disable()
@@ -73,7 +77,8 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
 
                 .and()
-                .addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class);
+                .addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class)
+                .addFilterBefore(new JwtBasicAuthenticationFilter(authenticationManager(), jwtTokenProvider, userRepository), CustomUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
