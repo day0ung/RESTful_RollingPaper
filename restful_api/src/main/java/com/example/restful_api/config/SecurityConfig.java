@@ -6,6 +6,7 @@ import com.example.restful_api.security.auth.AuthLoginService;
 import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import com.example.restful_api.security.jwt.filter.JwtBasicAuthenticationFilter;
+import com.example.restful_api.security.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,8 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final UserRepository userRepository;
+
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -77,6 +80,12 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
 
                 .and()
+                .oauth2Login()
+//                .successHandler(oAuth2LoginSuccessHandler)
+//                .failureHandler(oAuth2LoginFailureHandler)
+                .userInfoEndpoint().userService(customOAuth2UserService);
+
+        http
                 .addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class)
                 .addFilterBefore(new JwtBasicAuthenticationFilter(authenticationManager(), jwtTokenProvider, userRepository), CustomUsernamePasswordAuthenticationFilter.class);
 
