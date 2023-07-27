@@ -1,7 +1,7 @@
 package com.example.restful_api.security.auth.filter;
 
 import com.example.restful_api.domain.user.User;
-import com.example.restful_api.security.auth.AuthLoginUser;
+import com.example.restful_api.security.CustomUserPrincipal;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,8 +36,8 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-            AuthLoginUser authLoginUser = (AuthLoginUser) authentication.getPrincipal();
-            log.info("LoginUser : {}", authLoginUser);
+            CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authentication.getPrincipal();
+            log.info("LoginUser : {}", customUserPrincipal);
             return authentication;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -50,8 +49,8 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("Login successfulAuthentication()");
 
-        AuthLoginUser authLoginUser = (AuthLoginUser) authResult.getPrincipal();
-        String jwtToken = jwtTokenProvider.createToken(authLoginUser);
+        CustomUserPrincipal customUserPrincipal = (CustomUserPrincipal) authResult.getPrincipal();
+        String jwtToken = jwtTokenProvider.createToken(customUserPrincipal);
         jwtTokenProvider.sendToken(response, jwtToken);
 
     }
