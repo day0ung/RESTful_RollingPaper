@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AuthLoginService implements UserDetailsService{
+public class AuthLoginService implements UserDetailsService {
 
     private final UserRepository userRepository;
 

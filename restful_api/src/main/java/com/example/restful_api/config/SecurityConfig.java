@@ -2,21 +2,20 @@ package com.example.restful_api.config;
 
 import com.example.restful_api.domain.user.Role;
 import com.example.restful_api.security.auth.AuthLoginService;
-import com.example.restful_api.security.auth.CustomUsernamePasswordAuthenticationFilter;
+import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
+import com.example.restful_api.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -29,6 +28,8 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final AuthLoginService authLoginService;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -72,7 +73,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
 
                 .and()
-                .addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager()), LogoutFilter.class);
+                .addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class);
 
         return http.build();
     }
@@ -92,8 +93,4 @@ public class SecurityConfig {
         return source;
     }
 
-//    @Bean
-//    public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter(){
-//        return new CustomUsernamePasswordAuthenticationFilter();
-//    }
 }
