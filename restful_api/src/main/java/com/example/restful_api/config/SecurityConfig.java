@@ -88,7 +88,7 @@ public class SecurityConfig {
                 .userInfoEndpoint().userService(customOAuth2UserService);
 
         http.addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class)
-            .addFilterBefore(new JwtRequestFilter(), CustomUsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtRequestFilter(jwtTokenProvider, authLoginService), CustomUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
