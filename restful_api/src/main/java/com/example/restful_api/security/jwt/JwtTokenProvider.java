@@ -39,7 +39,6 @@ public class JwtTokenProvider {
                 .withSubject(customUserPrincipal.getUser().getName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10)))
                 .withClaim("email", customUserPrincipal.getUser().getEmail())
-                .withClaim("password", customUserPrincipal.getUser().getPassword())
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -57,6 +56,6 @@ public class JwtTokenProvider {
         return Optional.ofNullable(request.getHeader(AUTH_HEADER))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""))
-                .orElse("");
+                .orElse(null);
     }
 }

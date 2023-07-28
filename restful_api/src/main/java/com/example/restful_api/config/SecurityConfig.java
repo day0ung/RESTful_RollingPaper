@@ -5,8 +5,10 @@ import com.example.restful_api.domain.user.UserRepository;
 import com.example.restful_api.security.auth.AuthLoginService;
 import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
-import com.example.restful_api.security.jwt.filter.JwtBasicAuthenticationFilter;
+import com.example.restful_api.security.jwt.filter.JwtRequestFilter;
 import com.example.restful_api.security.oauth2.CustomOAuth2UserService;
+import com.example.restful_api.security.oauth2.OAuth2LoginFailureHandler;
+import com.example.restful_api.security.oauth2.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +33,12 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final AuthLoginService authLoginService;
-
     private final JwtTokenProvider jwtTokenProvider;
-
     private final UserRepository userRepository;
-
     private final CustomOAuth2UserService customOAuth2UserService;
+
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -81,13 +83,12 @@ public class SecurityConfig {
 
                 .and()
                 .oauth2Login()
-//                .successHandler(oAuth2LoginSuccessHandler)
-//                .failureHandler(oAuth2LoginFailureHandler)
+                .successHandler(oAuth2LoginSuccessHandler)
+                .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint().userService(customOAuth2UserService);
 
-        http
-                .addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class)
-                .addFilterBefore(new JwtBasicAuthenticationFilter(authenticationManager(), jwtTokenProvider, userRepository), CustomUsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class)
+            .addFilterBefore(new JwtRequestFilter(), CustomUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -30,4 +30,5 @@ public class User extends BaseTimeEntity {
     private Provider provider;
     private String providerId;
 
+
 }

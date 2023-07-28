@@ -9,7 +9,10 @@ import com.example.restful_api.security.oauth2.userinfo.NaverOAuth2UserInfo;
 import com.example.restful_api.security.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.util.Map;
 
@@ -18,7 +21,7 @@ import java.util.Map;
 public class OAuth2Attributes {
 
     private String nameAttributeKey; // OAuth2 로그인 진행 시 키가 되는 필드 값, PK와 같은 의미
-    private OAuth2UserInfo oauth2UserInfo; // 소셜 타입별 로그인 유저 정보(닉네임, 이메일, 프로필 사진 등등)
+    private OAuth2UserInfo oauth2UserInfo;// 소셜 타입별 로그인 유저 정보(닉네임, 이메일, 프로필 사진 등등)
 
     @Builder
     public OAuth2Attributes(String nameAttributeKey, OAuth2UserInfo oauth2UserInfo) {
@@ -60,9 +63,10 @@ public class OAuth2Attributes {
     }
 
     public User toEntity(Provider provider, OAuth2UserInfo oauth2UserInfo) {
-        log.info("USER ROLE : {} ", Role.USER );
         return User.builder()
                 .name(oauth2UserInfo.getName())
+                .email(oauth2UserInfo.getEmail())
+                .password(oauth2UserInfo.getEmail())
                 .provider(provider)
                 .providerId(oauth2UserInfo.getProviderId())
                 .role(Role.USER)
