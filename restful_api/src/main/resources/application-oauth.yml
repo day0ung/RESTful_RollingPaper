@@ -1,0 +1,46 @@
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ENC(2HkMH+3Uprph3fiN2bzr9Ilh3GNRVPyTRqbMo9Zl12mgauyfD1C0zYMI4can5p8LmMpBNqn8LnzYUyDwSguyBeEn3AhnF7BPpLDT5DEI268/eBtZkcYqBQ==)
+            client-secret: ENC(qWijee4bHqOOd8jUOFoADouTirv9fvhGapxyQPSzgWt4O6cu7spTelwJ6jU9wUoN)
+            scope:
+              - email
+              - profile
+
+          naver:
+            client-id: ENC(SdZw2s/8LQ4QCYpzRgNHB/9sAowj/dvWm0uDps4Q7ls=)
+            client-secret: ENC(NNWcGYprijh9T+fk9HZMsvlBWnqVuYku)
+            scope:
+              - name
+              - email
+            client-name: Naver
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+
+          kakao:
+            client-id: ENC(5rX1WFU5tJyJQHDdKAe1q6YzycneqYS/8Z2RwcgpplBuTTNsE+jKoRdD3BmWvd8i)
+            client-secret: ENC(yWsubQmNfTJE7ypbuFHLcUGemRvrgZSwUxuyeDmVn2w1IvQjmJb2W5s+LEnRl3Z7)
+            scope:
+              - account_email
+              - profile_nickname
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: POST
+
+        provider:
+          naver:
+            authorization-uri: https://nid.naver.com/oauth2.0/authorize
+            token-uri: https://nid.naver.com/oauth2.0/token
+            user-info-uri: https://openapi.naver.com/v1/nid/me
+            user-name-attribute: response
+
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
