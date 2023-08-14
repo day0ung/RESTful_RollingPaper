@@ -13,8 +13,8 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "USERS")
-public class User extends BaseTimeEntity {
+@Table
+public class Users extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +29,5 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
     private String providerId;
-
 
 }

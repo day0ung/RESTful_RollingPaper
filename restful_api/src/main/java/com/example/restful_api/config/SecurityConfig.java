@@ -1,7 +1,7 @@
 package com.example.restful_api.config;
 
 import com.example.restful_api.domain.user.Role;
-import com.example.restful_api.domain.user.UserRepository;
+import com.example.restful_api.domain.user.UsersRepository;
 import com.example.restful_api.security.auth.AuthLoginService;
 import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
@@ -34,7 +34,7 @@ public class SecurityConfig {
 
     private final AuthLoginService authLoginService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;

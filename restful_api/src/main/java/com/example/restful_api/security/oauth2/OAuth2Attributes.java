@@ -2,7 +2,7 @@ package com.example.restful_api.security.oauth2;
 
 import com.example.restful_api.domain.user.Provider;
 import com.example.restful_api.domain.user.Role;
-import com.example.restful_api.domain.user.User;
+import com.example.restful_api.domain.user.Users;
 import com.example.restful_api.security.oauth2.userinfo.KakaoOAuth2UserInfo;
 import com.example.restful_api.security.oauth2.userinfo.NaverOAuth2UserInfo;
 import com.example.restful_api.security.oauth2.userinfo.OAuth2UserInfo;
@@ -59,8 +59,8 @@ public class OAuth2Attributes {
                 .build();
     }
 
-    public User toEntity(Provider provider, OAuth2UserInfo oauth2UserInfo) {
-        return User.builder()
+    public Users toEntity(Provider provider, OAuth2UserInfo oauth2UserInfo) {
+        return Users.builder()
                 .name(oauth2UserInfo.getName())
                 .email(oauth2UserInfo.getEmail())
                 .password(oauth2UserInfo.getEmail())
