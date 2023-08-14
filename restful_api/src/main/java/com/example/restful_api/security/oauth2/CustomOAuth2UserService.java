@@ -1,8 +1,8 @@
 package com.example.restful_api.security.oauth2;
 
 import com.example.restful_api.domain.user.Provider;
-import com.example.restful_api.domain.user.Users;
-import com.example.restful_api.domain.user.UsersRepository;
+import com.example.restful_api.domain.user.User;
+import com.example.restful_api.domain.user.UserRepository;
 import com.example.restful_api.security.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
 
     private static final String GOOGLE = "google";
     private static final String NAVER = "naver";
@@ -40,16 +40,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2Attributes extractAttributes = OAuth2Attributes.of(provider, userNameAttributeName, attributes);
         log.info("OAuth2Attributes {}", extractAttributes.getOauth2UserInfo());
-        Users users = saveOrUpdate(provider, extractAttributes);
+        User user = saveOrUpdate(provider, extractAttributes);
 
-        return new CustomUserPrincipal(users, oAuth2User.getAttributes());
+        return new CustomUserPrincipal(user, oAuth2User.getAttributes());
     }
 
-    private Users saveOrUpdate(Provider provider, OAuth2Attributes attributes) {
-        Users users = usersRepository.findByEmail(attributes.getOauth2UserInfo().getEmail())
+    private User saveOrUpdate(Provider provider, OAuth2Attributes attributes) {
+        User user = userRepository.findByEmail(attributes.getOauth2UserInfo().getEmail())
                 .orElse(attributes.toEntity(provider, attributes.getOauth2UserInfo()));
 
-        return usersRepository.save(users);
+        return userRepository.save(user);
     }
 
 

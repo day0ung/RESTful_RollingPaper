@@ -1,6 +1,6 @@
 package com.example.restful_api.security.auth.filter;
 
-import com.example.restful_api.domain.user.Users;
+import com.example.restful_api.domain.user.User;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import com.example.restful_api.security.CustomUserPrincipal;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +29,10 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            Users users = objectMapper.readValue(request.getInputStream(), Users.class);
+            User user = objectMapper.readValue(request.getInputStream(), User.class);
 
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(users.getEmail(), users.getPassword());
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 

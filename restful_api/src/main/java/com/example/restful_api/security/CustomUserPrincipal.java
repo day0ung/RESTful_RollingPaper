@@ -1,6 +1,6 @@
 package com.example.restful_api.security;
 
-import com.example.restful_api.domain.user.Users;
+import com.example.restful_api.domain.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -11,23 +11,23 @@ import java.util.Map;
 
 public class CustomUserPrincipal implements OAuth2User, UserDetails {
 
-    private Users users;
+    private User user;
     private Map<String, Object> attributes;
 
 
     //일반 로그인
-    public CustomUserPrincipal(Users users){
-        this.users = users;
+    public CustomUserPrincipal(User user){
+        this.user = user;
     }
 
     //Oauth 로그인
-    public CustomUserPrincipal(Users users, Map<String,Object> attributes){
-        this.users = users;
+    public CustomUserPrincipal(User user, Map<String,Object> attributes){
+        this.user = user;
         this.attributes = attributes;
     }
 
-    public Users getUser() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -38,18 +38,18 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(() -> users.getRole().getKey());
+        collection.add(() -> user.getRole().getKey());
         return collection;
     }
 
     @Override
     public String getPassword() {
-        return users.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return users.getName();
+        return user.getName();
     }
 
     @Override
