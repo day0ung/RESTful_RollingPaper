@@ -1,7 +1,7 @@
 package com.example.restful_api.security.oauth2;
 
-import com.example.restful_api.security.CustomUserPrincipal;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
+import com.example.restful_api.security.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

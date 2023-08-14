@@ -2,18 +2,14 @@ package com.example.restful_api.security.jwt.filter;
 
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.example.restful_api.domain.user.User;
-import com.example.restful_api.domain.user.UserRepository;
 import com.example.restful_api.security.CustomUserPrincipal;
 import com.example.restful_api.security.auth.AuthLoginService;
-import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
