@@ -3,16 +3,13 @@ package com.example.restful_api.security.oauth2;
 import com.example.restful_api.domain.user.Provider;
 import com.example.restful_api.domain.user.Role;
 import com.example.restful_api.domain.user.User;
-import com.example.restful_api.security.oauth2.userinfo.GoogleOAuth2UserInfo;
 import com.example.restful_api.security.oauth2.userinfo.KakaoOAuth2UserInfo;
 import com.example.restful_api.security.oauth2.userinfo.NaverOAuth2UserInfo;
 import com.example.restful_api.security.oauth2.userinfo.OAuth2UserInfo;
+import com.example.restful_api.security.oauth2.userinfo.GoogleOAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.util.Map;
 

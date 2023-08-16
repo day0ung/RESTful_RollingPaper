@@ -1,24 +1,62 @@
 spring:
   profiles:
     include: oauth
+    active: test # test, prod
 
   h2:
     console:
       enabled: true
       path: /h2-console
 
-  datasource:
-    url: jdbc:h2:mem:test
-    username:
-    password:
-    driver-class-name: org.h2.Driver
 
+  jwt:
+    sercret: thisissercret
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
   jpa:
+    generate-ddl: true
+    open-in-view: false
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
 
-  jwt:
-    sercret:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ENC(ZRl6t1LSC6ZB5kJNthOJsZEy2eIDkbXlioy2VCNO4P5E17WBIkarVUYsq1xgQ5K8Ki3J2hTpBF2gMOOXW65NmddR+9kXgudSa2QbN8iFfq9wW3O1XvYKSBe901Clrz5f83YdHcWGTrdzLSoWPRUJ5A==)
+    username: ENC(/+lB26gh6Xwda/uc8XN6Dg==)
+    password: ENC(AKia6xht1TJEbrcNNO5pOg==)
+
+  hikari:
+    connection-init-sql: SELECT 1
+    minimum-idle: 1
+    idle-timeout: 300000
+    maximum-pool-size: 31
+    max-lifetime: 540000

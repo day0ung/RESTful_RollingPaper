@@ -1,8 +1,8 @@
 package com.example.restful_api.security.auth.filter;
 
 import com.example.restful_api.domain.user.User;
-import com.example.restful_api.security.CustomUserPrincipal;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
+import com.example.restful_api.security.CustomUserPrincipal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
