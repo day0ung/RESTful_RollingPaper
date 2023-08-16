@@ -32,4 +32,5 @@ public class PaperResponse {
         this.content = paper.getContent();
         this.commentList = paper.getCommentList();
     }
+
 }

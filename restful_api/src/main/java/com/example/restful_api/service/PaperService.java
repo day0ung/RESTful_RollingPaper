@@ -1,5 +1,6 @@
 package com.example.restful_api.service;
 
+import com.example.restful_api.api.BaseResponse;
 import com.example.restful_api.api.dto.paper.PaperPostRequest;
 import com.example.restful_api.api.dto.paper.PaperPutRequest;
 import com.example.restful_api.api.dto.paper.PaperResponse;
@@ -7,6 +8,9 @@ import com.example.restful_api.domain.papers.Paper;
 import com.example.restful_api.domain.papers.PaperRepository;
 import com.example.restful_api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,4 +53,25 @@ public class PaperService {
     }
 
 
+    @Transactional(readOnly = true)
+    public BaseResponse<?> searchPaperList(String searchWord, Pageable pageable) {
+        Page<Paper> paperPage = paperRepository.search(searchWord, pageable).orElseGet(Page::empty);
+
+        if (paperPage.isEmpty()) {
+            return BaseResponse.set(HttpStatus.NOT_FOUND, paperPage);
+        } else {
+            return BaseResponse.set(HttpStatus.OK, paperPage);
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public PaperResponse getPaper(Long paperId) {
+        Paper paper = paperRepository.findById(paperId).orElseThrow(
+                () -> new ResourceNotFoundException(Paper.class.getSimpleName(), "paperId", paperId)
+        );
+
+        return new PaperResponse(paper);
+
+    }
 }
