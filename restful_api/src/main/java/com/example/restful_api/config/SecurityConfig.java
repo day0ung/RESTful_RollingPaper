@@ -2,6 +2,7 @@ package com.example.restful_api.config;
 
 import com.example.restful_api.domain.user.Role;
 import com.example.restful_api.domain.user.UserRepository;
+import com.example.restful_api.security.CustomAuthenticationEntryPoint;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import com.example.restful_api.security.jwt.filter.JwtRequestFilter;
 import com.example.restful_api.security.login.AuthLoginService;
@@ -75,6 +76,11 @@ public class SecurityConfig {
         return new CustomAuthenticationFailureHandler();
     }
 
+    @Bean
+    public CustomAuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
+
 
     @Bean
     public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() {
@@ -100,6 +106,9 @@ public class SecurityConfig {
 
                 .and()
                 .cors().configurationSource(corsConfigurationSource())
+
+                .and()
+                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint())
 
                 .and()
                 .authorizeRequests()
