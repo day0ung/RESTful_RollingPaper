@@ -1,12 +1,17 @@
 package com.example.restful_api.domain.user;
 
 import com.example.restful_api.domain.BaseTimeEntity;
+import com.example.restful_api.domain.commnets.Comment;
+import com.example.restful_api.domain.papers.Paper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -29,6 +34,12 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
     private String providerId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Paper> papers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
 
 }
