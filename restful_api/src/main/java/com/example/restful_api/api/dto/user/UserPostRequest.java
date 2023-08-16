@@ -1,5 +1,7 @@
 package com.example.restful_api.api.dto.user;
 
+import com.example.restful_api.domain.user.Provider;
+import com.example.restful_api.domain.user.Role;
 import com.example.restful_api.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +15,13 @@ public class UserPostRequest {
     String email;
     String password;
 
-    public User toEntity(){
+    public User toEntity(String encodePassword, Role role, Provider provider){
         return User.builder()
-                .name(this.name)
-                .email(this.email)
-                .password(this.password)
+                .name(name)
+                .email(email)
+                .password(encodePassword)
+                .role(role)
+                .provider(provider)
                 .build();
     }
 }
