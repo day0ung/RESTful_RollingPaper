@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -29,7 +31,7 @@ public class Paper extends BaseTimeEntity {
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-    @OneToMany(mappedBy = "paper")
+    @OneToMany(mappedBy = "paper", cascade = ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
 }
