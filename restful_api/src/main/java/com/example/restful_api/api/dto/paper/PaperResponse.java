@@ -27,7 +27,7 @@ public class PaperResponse {
 
     public PaperResponse(Paper paper){
         this.paperId = paper.getId();
-        this.userId = paper.getUserId();
+        this.userId = paper.getUser().getId();
         this.title = paper.getTitle();
         this.content = paper.getContent();
         this.commentList = paper.getCommentList();

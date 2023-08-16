@@ -17,7 +17,7 @@ public class CommentPostRequest {
 
     public Comment toEntity(Paper paper){
         return Comment.builder()
-                .title(title)
+                .name(title)
                 .comment(comment)
                 .paper(paper)
                 .build();
