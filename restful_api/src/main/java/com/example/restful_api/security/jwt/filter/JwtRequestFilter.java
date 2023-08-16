@@ -3,7 +3,7 @@ package com.example.restful_api.security.jwt.filter;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.restful_api.security.CustomUserPrincipal;
-import com.example.restful_api.security.auth.AuthLoginService;
+import com.example.restful_api.security.login.AuthLoginService;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

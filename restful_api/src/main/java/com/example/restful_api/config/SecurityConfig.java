@@ -2,13 +2,15 @@ package com.example.restful_api.config;
 
 import com.example.restful_api.domain.user.Role;
 import com.example.restful_api.domain.user.UserRepository;
-import com.example.restful_api.security.auth.AuthLoginService;
-import com.example.restful_api.security.auth.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
 import com.example.restful_api.security.jwt.filter.JwtRequestFilter;
+import com.example.restful_api.security.login.AuthLoginService;
+import com.example.restful_api.security.login.filter.CustomUsernamePasswordAuthenticationFilter;
+import com.example.restful_api.security.login.handler.CustomAuthenticationFailureHandler;
+import com.example.restful_api.security.login.handler.CustomAuthenticationSuccessHandler;
 import com.example.restful_api.security.oauth2.CustomOAuth2UserService;
-import com.example.restful_api.security.oauth2.OAuth2LoginFailureHandler;
-import com.example.restful_api.security.oauth2.OAuth2LoginSuccessHandler;
+import com.example.restful_api.security.oauth2.handler.OAuth2LoginFailureHandler;
+import com.example.restful_api.security.oauth2.handler.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +42,8 @@ public class SecurityConfig {
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
+    private final String LOGIN_FILTER_URL = "/api/user/signin";
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -59,6 +63,27 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(authLoginService);
         return new ProviderManager(provider);
+    }
+
+    @Bean
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler(jwtTokenProvider);
+    }
+
+    @Bean
+    CustomAuthenticationFailureHandler customAuthenticationFailureHandler(){
+        return new CustomAuthenticationFailureHandler();
+    }
+
+
+    @Bean
+    public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() {
+        CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter(authenticationManager());
+        filter.setFilterProcessesUrl(LOGIN_FILTER_URL);
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(customAuthenticationFailureHandler());
+        return filter;
     }
 
 
@@ -87,7 +112,7 @@ public class SecurityConfig {
                 .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint().userService(customOAuth2UserService);
 
-        http.addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider), LogoutFilter.class)
+        http.addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager()), LogoutFilter.class)
             .addFilterBefore(new JwtRequestFilter(jwtTokenProvider, authLoginService), CustomUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
