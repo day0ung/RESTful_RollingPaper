@@ -1,12 +1,14 @@
 package com.example.restful_api.api.dto.paper;
 
 import com.example.restful_api.domain.papers.Paper;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Builder
-@AllArgsConstructor
-public class PostPaperRequestDto {
+@Getter
+@Setter
+@NoArgsConstructor
+public class PaperPostRequest {
 
     private String title;
     private String content;

@@ -1,6 +1,6 @@
 package com.example.restful_api.service;
 
-import com.example.restful_api.api.dto.user.PostUserRequestDto;
+import com.example.restful_api.api.dto.user.UserPostRequest;
 import com.example.restful_api.domain.user.Provider;
 import com.example.restful_api.domain.user.Role;
 import com.example.restful_api.domain.user.User;
@@ -18,7 +18,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User save(PostUserRequestDto dto){
+    public User save(UserPostRequest dto){
         User user = User.builder()
                 .name(dto.getName())
                 .email(dto.getEmail())

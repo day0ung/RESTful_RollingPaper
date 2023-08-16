@@ -1,14 +1,14 @@
 package com.example.restful_api.api.dto.user;
 
 import com.example.restful_api.domain.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class PostUserRequestDto {
+@NoArgsConstructor
+public class UserPostRequest {
     String name;
     String email;
     String password;
