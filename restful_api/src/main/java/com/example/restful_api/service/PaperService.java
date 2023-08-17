@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class PaperService {
+public class PaperService extends BaseService{
     private final PaperRepository paperRepository;
 
     @Transactional
@@ -27,7 +27,7 @@ public class PaperService {
 
     @Transactional
     public PaperResponse updatePaper(Long paperId , PaperPutRequest request) {
-        Paper paper = verifyPost(paperId);
+        Paper paper = verify(paperId, paperRepository, Paper.class);
 
         paper.updateTitle(request.getTitle());
         if (!request.getTitle().isEmpty()) paper.updateContent(request.getContent());
@@ -45,12 +45,7 @@ public class PaperService {
         return new PaperResponse(paper);
     }
 
-    private Paper verifyPost(Long paperId) {
-        Paper paper = paperRepository.findById(paperId).orElseThrow(
-                () -> new ResourceNotFoundException(Paper.class.getSimpleName(), "paperId", paperId)
-        );
-        return paper;
-    }
+
 
 
     @Transactional(readOnly = true)
