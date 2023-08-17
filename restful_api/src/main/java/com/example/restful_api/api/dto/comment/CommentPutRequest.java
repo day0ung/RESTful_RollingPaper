@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentPutRequest {
 
-    private String title;
-
     private String comment;
+
+    private String nickName;
 }

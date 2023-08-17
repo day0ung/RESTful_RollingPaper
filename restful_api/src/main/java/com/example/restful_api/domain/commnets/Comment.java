@@ -6,10 +6,12 @@ import com.example.restful_api.domain.papers.Paper;
 import com.example.restful_api.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Getter
 @Builder
 @AllArgsConstructor
 
@@ -26,7 +28,7 @@ public class Comment extends BaseTimeEntity {
     private User user;
 
     @Column(length = 500, nullable = false)
-    private String name;
+    private String nickName;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String comment;
@@ -36,7 +38,7 @@ public class Comment extends BaseTimeEntity {
     private Paper paper;
 
     public void updateName(String name) {
-        this.name = name;
+        this.nickName = nickName;
     }
 
     public void updateComment(String comment) {
