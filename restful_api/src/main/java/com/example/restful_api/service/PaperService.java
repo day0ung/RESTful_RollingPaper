@@ -6,7 +6,6 @@ import com.example.restful_api.api.dto.paper.PaperPutRequest;
 import com.example.restful_api.api.dto.paper.PaperResponse;
 import com.example.restful_api.domain.papers.Paper;
 import com.example.restful_api.domain.papers.PaperRepository;
-import com.example.restful_api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,15 +36,11 @@ public class PaperService extends BaseService{
 
     @Transactional
     public PaperResponse deletePaper(Long paperId) {
-        Paper paper = paperRepository.findById(paperId).orElseThrow(
-                () -> new ResourceNotFoundException(Paper.class.getSimpleName(),"paperId", paperId)
-        );
-        paperRepository.delete(paper);
+        Paper paper = verify(paperId, paperRepository, Paper.class);
+        paperRepository.deleteById(paper.getId());
 
         return new PaperResponse(paper);
     }
-
-
 
 
     @Transactional(readOnly = true)
@@ -62,9 +57,7 @@ public class PaperService extends BaseService{
 
     @Transactional(readOnly = true)
     public PaperResponse getPaper(Long paperId) {
-        Paper paper = paperRepository.findById(paperId).orElseThrow(
-                () -> new ResourceNotFoundException(Paper.class.getSimpleName(), "paperId", paperId)
-        );
+        Paper paper = verify(paperId, paperRepository, Paper.class);
 
         return new PaperResponse(paper);
 
