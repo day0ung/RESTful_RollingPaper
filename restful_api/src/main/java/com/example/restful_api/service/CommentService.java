@@ -7,6 +7,9 @@ import com.example.restful_api.domain.commnets.Comment;
 import com.example.restful_api.domain.commnets.CommentRepository;
 import com.example.restful_api.domain.papers.Paper;
 import com.example.restful_api.domain.papers.PaperRepository;
+import com.example.restful_api.domain.user.User;
+import com.example.restful_api.domain.user.UserRepository;
+import com.example.restful_api.security.CustomUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +24,18 @@ public class CommentService extends BaseService{
 
     private final PaperRepository paperRepository;
 
-    public CommentResponse createComment(Long paperId, CommentPostRequest request) {
-        Paper paper = verify(paperId, paperRepository, Paper.class);
-        Comment comment = commentRepository.save(request.toEntity(paper));
+    private final UserRepository userRepository;
+
+    public CommentResponse createComment(Long paperId, CommentPostRequest request, CustomUserPrincipal customUserPrincipal) {
+        Paper paper = verifyId(paperId, paperRepository, Paper.class);
+        User user = verifyUser(customUserPrincipal, userRepository);
+        Comment comment = commentRepository.save(request.toEntity(paper, user));
         return new CommentResponse(comment);
     }
 
-    public CommentResponse updateComment(Long commentId, CommentPutRequest request) {
-        Comment comment = verify(commentId, commentRepository, Comment.class);
-
+    public CommentResponse updateComment(Long commentId, CommentPutRequest request, CustomUserPrincipal customUserPrincipal) {
+        User user = verifyUser(customUserPrincipal, userRepository);
+        Comment comment = verifyId(commentId, commentRepository, Comment.class);
         if (!request.getComment().isEmpty()) comment.updateComment(request.getComment());
         if (!request.getNickName().isEmpty()) comment.updateName(request.getNickName());
 
@@ -37,20 +43,21 @@ public class CommentService extends BaseService{
 
     }
 
-    public CommentResponse deleteComment(Long commentId) {
-        Comment comment = verify(commentId, commentRepository, Comment.class);
+    public CommentResponse deleteComment(Long commentId, CustomUserPrincipal customUserPrincipal) {
+        verifyUser(customUserPrincipal, userRepository);
+        Comment comment = verifyId(commentId, commentRepository, Comment.class);
         commentRepository.deleteById(comment.getId());
         return new CommentResponse(comment);
     }
 
     public CommentResponse getComment(Long commentId) {
-        Comment comment = verify(commentId, commentRepository, Comment.class);
+        Comment comment = verifyId(commentId, commentRepository, Comment.class);
 
         return new CommentResponse(comment);
     }
 
     public List<CommentResponse> getCommentList(Long paperId) {
-        Paper paper = verify(paperId, paperRepository, Paper.class);
+        Paper paper = verifyId(paperId, paperRepository, Paper.class);
 
         List<CommentResponse> commentResponseList = paper.getCommentList()
                 .stream().map( comment -> new CommentResponse(comment))

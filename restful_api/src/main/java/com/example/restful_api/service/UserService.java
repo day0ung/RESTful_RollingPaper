@@ -57,4 +57,13 @@ public class UserService {
 
         return new UserResponse(user);
     }
+
+    public UserResponse getUser(CustomUserPrincipal customUserPrincipal) {
+        String email = customUserPrincipal.getUser().getEmail();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException(User.class.getSimpleName(), "email", email)
+        );
+
+        return null;
+    }
 }

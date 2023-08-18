@@ -25,7 +25,7 @@ public class UserController {
         return new ResponseEntity<> (BaseResponse.setSuccess(result), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/profile")
     public ResponseEntity<BaseResponse<UserResponse>> updateUser(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
                                                                  @RequestBody UserPutRequest request) throws Exception {
         UserResponse result = userService.updateUser(customUserPrincipal, request);
@@ -35,6 +35,12 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<BaseResponse<UserResponse>> deleteUser(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) throws Exception {
         UserResponse result = userService.deleteUser(customUserPrincipal);
+        return new ResponseEntity<> (BaseResponse.setSuccess(result), HttpStatus.OK);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<BaseResponse<UserResponse>> getUser(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) throws Exception {
+        UserResponse result = userService.getUser(customUserPrincipal);
         return new ResponseEntity<> (BaseResponse.setSuccess(result), HttpStatus.OK);
     }
 }

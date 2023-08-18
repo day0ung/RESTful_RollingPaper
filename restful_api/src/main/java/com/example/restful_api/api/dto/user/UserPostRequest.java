@@ -11,9 +11,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserPostRequest {
-    String name;
-    String email;
-    String password;
+    private String name;
+    private String email;
+    private String password;
 
     public User toEntity(String encodePassword, Role role, Provider provider){
         return User.builder()
