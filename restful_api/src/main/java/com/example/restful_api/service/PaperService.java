@@ -1,6 +1,7 @@
 package com.example.restful_api.service;
 
 import com.example.restful_api.api.BaseResponse;
+import com.example.restful_api.api.dto.PagingResponse;
 import com.example.restful_api.api.dto.paper.PaperPostRequest;
 import com.example.restful_api.api.dto.paper.PaperPutRequest;
 import com.example.restful_api.api.dto.paper.PaperResponse;
@@ -56,14 +57,13 @@ public class PaperService extends BaseService{
 
 
     @Transactional(readOnly = true)
-    public BaseResponse<?> searchPaperList(String searchWord, Pageable pageable) {
-        Page<Paper> paperPage = paperRepository.search(searchWord, pageable).orElseGet(Page::empty);
+    public BaseResponse<PagingResponse> searchPaperList(String searchWord, Pageable pageable) {
+        Page<Paper> result = paperRepository.search(searchWord, pageable).orElseGet(Page::empty);
 
-        if (paperPage.isEmpty()) {
-            return BaseResponse.set(HttpStatus.NOT_FOUND, paperPage);
-        } else {
-            return BaseResponse.set(HttpStatus.OK, paperPage);
-        }
+        PagingResponse pagingResponse = new PagingResponse(result);
+
+        return BaseResponse.set(HttpStatus.OK, pagingResponse);
+
 
     }
 
