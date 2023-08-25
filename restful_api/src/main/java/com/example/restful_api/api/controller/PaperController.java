@@ -2,6 +2,7 @@ package com.example.restful_api.api.controller;
 
 
 import com.example.restful_api.api.BaseResponse;
+import com.example.restful_api.api.dto.PagingResponse;
 import com.example.restful_api.api.dto.paper.PaperPostRequest;
 import com.example.restful_api.api.dto.paper.PaperPutRequest;
 import com.example.restful_api.api.dto.paper.PaperResponse;
@@ -47,9 +48,9 @@ public class PaperController {
 
 
     @GetMapping
-    public ResponseEntity<BaseResponse<?>> searchPaperList(@RequestParam(required = false) String searchWord,
+    public ResponseEntity<BaseResponse<PagingResponse>> searchPaperList(@RequestParam(required = false) String searchWord,
                                                                        Pageable pageable){
-        BaseResponse<?> response = paperService.searchPaperList(searchWord, pageable);
+        BaseResponse<PagingResponse> response = paperService.searchPaperList(searchWord, pageable);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
