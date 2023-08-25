@@ -17,6 +17,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleAllRuntimeExceptions(RuntimeException ex) {
+        BaseResponse<String> baseResponse = BaseResponse.set(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()+ex.getStackTrace());
+        return new ResponseEntity<>(baseResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         BaseResponse<String> baseResponse = BaseResponse.set(HttpStatus.BAD_REQUEST, ex.getMessage());
