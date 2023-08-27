@@ -3,8 +3,8 @@ package com.example.restful_api.security.jwt.filter;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.restful_api.security.CustomUserPrincipal;
-import com.example.restful_api.security.auth.AuthLoginService;
 import com.example.restful_api.security.jwt.JwtTokenProvider;
+import com.example.restful_api.security.login.AuthLoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +17,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -25,8 +28,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final AuthLoginService authLoginService;
 
+    private final List<String> allowedPath = Arrays.asList("/api/user/signup", "/api/user/signin");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String requestPath = request.getRequestURI();
+
+        if (allowedPath.contains(requestPath) || request.getMethod().equals("GET")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
         final String requestTokenHeader = request.getHeader("Authorization");
         String email = null;
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {

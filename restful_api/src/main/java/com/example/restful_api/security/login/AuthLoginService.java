@@ -1,4 +1,4 @@
-package com.example.restful_api.security.auth;
+package com.example.restful_api.security.login;
 
 import com.example.restful_api.domain.user.User;
 import com.example.restful_api.domain.user.UserRepository;
